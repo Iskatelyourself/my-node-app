@@ -1,7 +1,9 @@
+// Юреня Даниил Александрович, группа 478
 const http = require('http');
 
-const fio = "Юреня Даниил Александрович";
-const group = "478";
+const EventEmitter = require('events');
+
+const logger = require('./logger');
 
 function arctan(x, scale) {
   let sum = scale / BigInt(x);
@@ -21,13 +23,49 @@ function calcPi(digits) {
   return `${str[0]}.${str.slice(1, 1 + digits)}`;
 }
 
-const piValue = calcPi(23);
+class AppServer extends EventEmitter {
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-  res.end(`<p>${fio}</p><p>Группа: ${group}</p><p>Число Пи: ${piValue}</p>`);
+  start(port) {
+
+    this.server = http.createServer(function (req, res) {
+      this.emit('request:received', {
+        url: req.url,
+        method: req.method
+      });
+
+      res.end('Hello from Event-Driven Server!');
+    }.bind(this)); 
+
+    this.server.listen(port, function () {
+      this.emit('server:started', port);
+    }.bind(this));
+  }
+
+  stop() {
+    this.server.close(function () {
+      this.emit('server:stopped');
+    }.bind(this));
+  }
+}
+
+const app = new AppServer();
+
+app.on('server:started', function (port) {
+  console.log('Сервер запущен на порту ' + port);
 });
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log(`Сервер запущен на http://localhost:${PORT}`);
+
+app.on('request:received', function (data) {
+  console.log('Получен запрос: ' + data.method + ' ' + data.url);
 });
+
+app.on('server:stopped', function () {
+  console.log('Сервер остановлен');
+});
+
+logger.setupLogger(app);
+
+app.start(3000);
+
+setTimeout(function () {
+  app.stop();
+}, 10000);
