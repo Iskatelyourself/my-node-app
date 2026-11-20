@@ -1,0 +1,10 @@
+{
+  "name": "lab23-mongodb",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "mongodb": "^7.9.1"
+  }
+}
