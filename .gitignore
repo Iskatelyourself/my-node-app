@@ -1,3 +1,5 @@
 node_modules/
 .env
 .DS_Store
+lab21/input.txt
+lab21/output-*.txt
