@@ -1,0 +1,16 @@
+{
+  "name": "koa-mongodb-users",
+  "version": "1.0.0",
+  "description": "REST API пользователей на Koa и MongoDB",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@koa/router": "^15.7.1",
+    "joi": "^18.3.2",
+    "koa": "^3.3.0",
+    "mongodb": "^7.9.1"
+  }
+}
